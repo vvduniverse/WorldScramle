@@ -9,47 +9,43 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let people = ["Finn", "Leia", "Luke", "Rey"]
+    @State private var usedWords = [String]()
+    @State private var rootWord = ""
+    @State private var newWord = ""
+    
     
     var body: some View {
-        
-        VStack(spacing: 0) {
-            
-//            if let fileURL = Bundle.main.url(forResource: "some-file", withExtension: "txt")
-//                
-//                if let fileContents = try? String(contentsOf: fileURL) {
-//                
-//            }
-                
-            List(people, id: \.self) {
-                Text($0)
-            }
-            
+        NavigationView {
             List {
-                Section("Section 1") {
-                    Text("Static row 1")
-                    Text("Static row 2")
+                Section {
+                    TextField("Enter your word", text: $newWord)
+                        .autocapitalization(.none)
                 }
                 
-                Section("Section 2") {
-                    ForEach(0..<5) {
-                        Text("Dynamic row \($0)")
+                Section {
+                    ForEach(usedWords, id: \.self) { word in
+                        HStack {
+                            Image(systemName: "\(word.count).circle")
+                            Text(word)
+                        }
                     }
                 }
-                
-                Section("Section 3") {
-                    Text("Static row 3")
-                    Text("Static row 4")
-                }
             }
-            .listStyle(.sidebar)
-            List(0 ..< 3) { item in
-                Text("Hello, world! \(item)")
-            }
-            List(0 ..< 3) {
-                Text("Hello, world! \($0)")
-            }
+            .navigationTitle(rootWord)
+            .onSubmit(addNewWord)
         }
+        
+    }
+    
+    func addNewWord() {
+        let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard answer.count > 0 else { return }
+        
+        withAnimation {
+            usedWords.insert(answer, at: 0)
+        }
+        newWord = ""
     }
 }
 
