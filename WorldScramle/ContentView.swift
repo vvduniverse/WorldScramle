@@ -15,6 +15,12 @@ struct ContentView: View {
         
         VStack(spacing: 0) {
             
+//            if let fileURL = Bundle.main.url(forResource: "some-file", withExtension: "txt")
+//                
+//                if let fileContents = try? String(contentsOf: fileURL) {
+//                
+//            }
+                
             List(people, id: \.self) {
                 Text($0)
             }
